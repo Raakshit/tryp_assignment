@@ -3,7 +3,7 @@ import DataTables from '@/Components/DataTables'
 
 export default function Home() {
 
-  const headers = ["TIMESTAMP","PRUCHASE ID","MAIL","NAME","SOURCE","STATUS","SELECT"];
+  const headers = ["Timestamp","PurchaseId","Mail","Name","Source","Status","SELECT"];
 
 
   return (

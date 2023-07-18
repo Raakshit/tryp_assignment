@@ -1,5 +1,5 @@
 "use client";
-import { useDatas } from "@/Store/tableData";
+import { TableInfo, useDatas } from "@/Store/tableData";
 import {
   Box,
   Select,
@@ -12,6 +12,7 @@ import {
   Tr,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+import ReactPaginate from "react-paginate";
 
 interface DataTableProps {
   headers: string[];
@@ -22,6 +23,10 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
   const { info, handleLoad } = useDatas();
   const [filterState, setFilterState] = useState("");
   const [loading, setLoading] = useState(true);
+  const [currentPage, setCurrentPage] = useState(0);
+  const perPage = 8;
+  const [sortedColumn, setSortedColumn] = useState<keyof TableInfo | null>(null);
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
     handleLoad();
@@ -32,6 +37,16 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
     setFilterState(e.target.value);
   };
 
+  const handleSortColumn = (column: keyof TableInfo) => {
+    const isStringColumn = typeof info[0][column] === 'string';
+    if (isStringColumn) {
+      console.log("Clicked a string type header");
+    } else {
+      console.log("Not a string type header");
+    }
+  };
+
+
   const filterData = info.filter((item) => {
     if (filterState === "success") {
       return item.Status.Success;
@@ -41,10 +56,17 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
       return item.Status.Waiting;
     }
     return true;
-  })
+  });
 
-  // topmost filtering should be of
-  // this is always active/ topmost filtering feature in this
+  // console.log(sortedData);
+
+  const pageCount = Math.ceil(filterData.length / perPage);
+  const offset = currentPage * perPage;
+  const currentItem = filterData.slice(offset, offset + perPage);
+
+  const handlePageChange = (selectedItem: { selected: number }) => {
+    setCurrentPage(selectedItem.selected);
+  };
 
   return (
     <Box overflowX="auto">
@@ -59,18 +81,24 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
         <Thead>
           <Tr>
             {headers.map((header) => (
-              <Th key={header}>{header}</Th>
+              <Th
+                onClick={() => handleSortColumn(header as keyof TableInfo)}
+                cursor="pointer"
+                key={header}
+              >
+                {header}
+              </Th>
             ))}
           </Tr>
         </Thead>
         <Tbody>
           {loading ? (
             <Tr>
-              <Td>Laoding Data</Td>
+              <Td>Loading Data</Td>
             </Tr>
           ) : (
             <>
-              {filterData.map((item) => (
+              {currentItem.map((item) => (
                 <Tr key={item.PurchaseId}>
                   <Td>{item.Timestamp}</Td>
                   <Td>{item.PurchaseId}</Td>
@@ -95,6 +123,18 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
           )}
         </Tbody>
       </Table>
+      <ReactPaginate
+        previousLabel="Previous"
+        nextLabel="Next"
+        breakLabel="..."
+        breakClassName="break-me"
+        pageCount={pageCount}
+        marginPagesDisplayed={2}
+        pageRangeDisplayed={5}
+        onPageChange={handlePageChange}
+        containerClassName="pagination"
+        activeClassName="active"
+      />
     </Box>
   );
 };
