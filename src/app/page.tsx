@@ -1,12 +1,18 @@
-import TableInfo from '@/Components/TableInfo'
 import Navbar from '@/Components/Navbar'
+import DataTables from '@/Components/DataTables'
 
 export default function Home() {
+
+  const headers = ["TIMESTAMP","PRUCHASE ID","MAIL","NAME","SOURCE","STATUS","SELECT"];
+
 
   return (
     <main >
       <Navbar/>
-      <TableInfo/>
+      <DataTables
+      caption="Booking"
+      headers={headers}
+      />
     </main>
   )
-}
+} 

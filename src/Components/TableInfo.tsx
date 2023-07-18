@@ -29,21 +29,6 @@ const TableInfo = () => {
 
   return (
     <>
-      {/* {
-        loading ? (
-          <>
-            <h3>Data loading</h3>
-          </>
-        ):(
-          <>
-          <h3>Data Loaded properly</h3>
-          {info.map((item)=>(
-            <h2 key={item.PurchaseId}>{item.Mail}</h2>
-          ))}
-          </>
-        )
-      }
-      <h2>Hello from frontend</h2> */}
       <TableContainer>
   <Table variant='striped' colorScheme='teal'>
     <TableCaption>Imperial to metric conversion factors</TableCaption>

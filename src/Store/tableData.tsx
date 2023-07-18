@@ -2,7 +2,7 @@
 import { ReactNode, createContext, useContext, useState } from "react";
 
 export type TableInfo = {
-  Timestamp: string;
+  Timestamp: number;
   PurchaseId: number;
   Mail: string;
   Name: string;
@@ -43,8 +43,10 @@ export const TableInfoProvider = ({ children }: { children: ReactNode }) => {
       };
       arr.push(newitem);
     });
-
-    setInfo(arr);
+    // Applying the topmost filtering feature that should always active or data initillty should be according to their timestamp
+    const filteredData = arr.sort((a,b)=>a.Timestamp - b.Timestamp)
+    // initally all the data is sorted only but when the real data came into play thne this would work/ or say you will able to see the function working 
+    setInfo(filteredData);
   };
 
   return (
