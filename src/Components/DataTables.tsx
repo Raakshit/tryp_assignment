@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { TableInfo, useDatas } from "@/Store/tableData";
 import {
   Box,
@@ -137,9 +137,12 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
           </Tr>
         </Thead>
         <Tbody>
+          {/* data functionality as if data is loading it will show loading other wise it will display the data  */}
           {loading ? (
             <Tr>
-              <Td>Loading Data</Td>
+              <Td  className="lottie_td">
+                Loading
+              </Td>
             </Tr>
           ) : (
             <>
@@ -176,6 +179,7 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
           )}
         </Tbody>
       </Table>
+      {/* adding react paginate over hear for pagination */}
       <ReactPaginate
         previousLabel="Previous"
         nextLabel="Next"
