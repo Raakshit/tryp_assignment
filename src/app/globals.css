@@ -19,6 +19,19 @@
   font-weight: bold;
 }
 
+.nav_main{
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 1rem;
+  box-shadow: 0px 2px 3px gray;
+}
+
+.nav_main h1{
+  font-size: 20px;
+  font-weight: 300;
+}
+
 .status.success {
   background-color: #66bb6a;
   color: #fff;
@@ -79,7 +92,7 @@
 }
 
 .pagination_item a.active {
-  background-color: #333;
+  background-color: red;
   color: #fff;
 }
 

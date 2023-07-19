@@ -116,7 +116,7 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
         </Select>
         <Input
           type="text"
-          placeholder="Search"
+          placeholder="Search from anything(purchase,mail or name)"
           value={searchQuery}
           onChange={handleSearchQueryChange}
         />
