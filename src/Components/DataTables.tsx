@@ -24,8 +24,11 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
   const [filterState, setFilterState] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
+  const [filterData, setFilterData] = useState<TableInfo[]>([]);
   const perPage = 8;
-  const [sortedColumn, setSortedColumn] = useState<keyof TableInfo | null>(null);
+  const [sortedColumn, setSortedColumn] = useState<keyof TableInfo | null>(
+    null
+  );
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("asc");
 
   useEffect(() => {
@@ -33,30 +36,44 @@ const DataTables: React.FC<DataTableProps> = ({ headers, caption }) => {
     setLoading(false);
   }, []);
 
+  useEffect(() => {
+    applyFilter();
+  }, [info, filterState]);
+
   const handleFilterChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setFilterState(e.target.value);
   };
 
   const handleSortColumn = (column: keyof TableInfo) => {
-    const isStringColumn = typeof info[0][column] === 'string';
-    if (isStringColumn) {
-      console.log("Clicked a string type header");
-    } else {
-      console.log("Not a string type header");
+    const isStringColumn = typeof info[0][column] === "string";
+
+    // filtering Logic working Fine
+    // on clicking the header
+    if(isStringColumn){
+      const sortedData = [...filterData].sort((a,b)=>{
+        const valueA = a[column] as string;
+        const valueB = b[column] as string;
+        return sortOrder === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+      });
+      setFilterData(sortedData);
+      setSortOrder(sortOrder === 'asc' ? 'desc' : 'asc');
+      setCurrentPage(0);
     }
   };
 
+  const applyFilter = () => {
+    let filteredData = info;
 
-  const filterData = info.filter((item) => {
     if (filterState === "success") {
-      return item.Status.Success;
+      filteredData = info.filter((item) => item.Status.Success);
     } else if (filterState === "failed") {
-      return item.Status.Failed;
+      filteredData = info.filter((item) => item.Status.Failed);
     } else if (filterState === "waiting") {
-      return item.Status.Waiting;
+      filteredData = info.filter((item) => item.Status.Waiting);
     }
-    return true;
-  });
+
+    setFilterData(filteredData);
+  };
 
   // console.log(sortedData);
 
